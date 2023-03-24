@@ -77,3 +77,10 @@ let subscription = foodbank.zip(timer)
     print("recieve result \(result)")
 }
 ```
+**output**
+```
+recieve result apple at 2023-03-24 16:04:39 +0000
+recieve result bread at 2023-03-24 16:04:40 +0000
+completion with failure: The operation couldn’t be completed. (__lldb_expr_44.MyError error 1.)
+
+```
