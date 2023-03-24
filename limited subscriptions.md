@@ -39,3 +39,41 @@ recieve item orange at 5:53:08 PM
 recieve item milk at 5:53:09 PM
 completion: finished
 ```
+
+## The Completion
+the completion allows us to handle errors in our stream or pipline and heres a code example of how we can handle errors in our stream
+these errors will stop our stream
+
+``` swift
+///Publisher that will pass limited number of values
+let foodbank: Publishers.Sequence<[String], Never> = ["apple","bread","orange","milk"].publisher
+var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
+let calendar = Calendar.current
+let endDate = calendar.date(byAdding: .second, value: 3,to: .now)!
+
+struct MyError: Error{}
+func throwErrorEndDate(foodItem: String, date: Date) throws -> String{
+    if date < endDate{
+        return "\(foodItem) at \(date)"
+    } else {
+        throw MyError()
+    }
+}
+
+let subscription = foodbank.zip(timer)
+    .tryMap({ (foodItem,timeStamp) in
+//        return "recieve item \(foodItem) at \(timeStamp.formatted(date: .omitted, time: .standard))"
+        try throwErrorEndDate(foodItem: foodItem, date: timeStamp)
+    })
+    .sink { (completion) in
+    switch completion{
+    case .finished:
+        print("Comletion: finished")
+    case .failure(let error):
+        print("completion with failure: \(error.localizedDescription)")
+    }
+} receiveValue: { (result) in /// changed because we return a single string in the trymap
+    print("recieve result \(result)")
+}
+```
