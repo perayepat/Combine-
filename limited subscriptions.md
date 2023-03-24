@@ -31,3 +31,11 @@ let subscription = foodbank.zip(timer).sink { (completion) in
 }
 
 ```
+**output**
+```
+recieve item apple at 5:53:07 PM
+recieve item bread at 5:53:08 PM
+recieve item orange at 5:53:08 PM
+recieve item milk at 5:53:09 PM
+completion: finished
+```
