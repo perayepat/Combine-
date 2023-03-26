@@ -55,3 +55,41 @@ When not using the unowned self and weak self this can cause a memory cycle erro
             .store(in: &subscriptions)
     }
 ```
+
+**Assign to**
+`.assign(to:)` operator manages the life cycle of the subscription , meaning we don't have to store the anycancellables that we are resposible for like `.assign(to: ,on:)`
+
+_swiftui example_
+
+```swift
+class MyModel: ObservableObject {
+    @Published var lastUpdated: Date = Date()
+    
+    init() {
+         Timer.publish(every: 1.0, on: .main, in: .common)
+             .autoconnect()
+             .assign(to: &$lastUpdated)
+        //inout &, access publihser of @Publihsed $
+    }
+}
+
+
+import SwiftUI
+
+struct ClockView: View {
+    @StateObject var clockModel = MyModel()
+    
+    var dateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm:ss"
+        return dateFormatter
+    }
+    
+    var body: some View {
+        Text(dateFormatter.string(from: clockModel.lastUpdated))
+            .fixedSize()
+            .padding(50)
+            .font(.largeTitle)
+    }
+}
+```
