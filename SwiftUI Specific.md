@@ -8,16 +8,6 @@ SwiftUI uses `the objectWillChange` Publisher to update the View when you store 
 You can also manually send updates through objectWillChange using its send() method when you need to manually update the view.
 
 ```swift
-//: [Previous](@previous)
-
-//SwiftUI works with ObservableObject Protocol
-
-import Foundation
-import Combine
-import PlaygroundSupport
-
-PlaygroundPage.current.needsIndefiniteExecution = true
-
 class ViewModel: ObservableObject {
   
     @Published var userNames = ["Bill", "Susan", "Bob"]
@@ -51,7 +41,5 @@ let subscription = viewModel.objectWillChange.sink { _ in
 
 //viewModel.userNames.append("Karen")
 viewModel.userNamesSubject.send(["Karen"])
-
-//: [Next](@next)
 
 ```
