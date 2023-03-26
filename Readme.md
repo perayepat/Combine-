@@ -13,17 +13,16 @@
 **sequence publihser, one-shot publisher**
 - finish automatically when done 
 
-**--- Multithreading in Combine ---**
+**Multithreading in Combine**
 - reveive on 
 - subscribe to 
 - where is multithreading built in? - urlsession
 
 # Publishers and Starting Streams
-
 How to pass values into a Combine data stream?
  Publisher: the someone who emit values
 
-** Key parts of a publisher **
+===== Key parts of a publisher =========
  
 protocol Publisher {
    associatedtype Output
@@ -34,19 +33,19 @@ protocol Publisher {
                                         Self.Output == S.Input
 }
 
-** continously emitting values **
+====== continously emitting values =====
  
-** Subject **
+---- Subject ----
 CurrentValueSubject<Int, Never>(1000)
 PassthroughSubject<Int, Never>()
  
-** SwiftUI specific **
+---- SwiftUI specific ----
 @Published                -> property wrapper with added CurrentValueSubject
 ObservableObject Protocol -> objectWillChange PassthroughSubject
  
  
  
-** limited-values publishers **
+===== limited-values publishers =======
  
  Sequence  [1,2,3,4].publisher
  Just
@@ -58,7 +57,7 @@ ObservableObject Protocol -> objectWillChange PassthroughSubject
  Optional(nil).publisher
  
  
-** Foundation Framework **
+ ---- Foundation Framework ----
 
  Timer publisher
  URLSession dataTaskPublisher
@@ -66,7 +65,7 @@ ObservableObject Protocol -> objectWillChange PassthroughSubject
  publisher on KVO instance - replacing target/action patterns
  
  
- ** type system of Publishers **
+ === type system of Publishers ===
  
  type erasing:
  AnyPublisher
