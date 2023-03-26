@@ -32,3 +32,54 @@ newUserNameEntered.send("BOB")
 newUserNameEntered.send(completion: .finished)
 
 ```
+
+# Multiple Publisher Example
+
+You don't need to use a didset anymore because now you can just subscribe to the event 
+
+```swift
+class ViewModel {
+    
+   private let userNamesSubject = CurrentValueSubject<[String], Never>(["Bill"])
+    var userNames: AnyPublisher<[String], Never>
+    
+    let newUserNameEntered = PassthroughSubject<String, Never>() /// This is going to be used to add and change user names
+    
+    
+    var subscriptions = Set<AnyCancellable>()
+    
+    init() {
+        // create publisher stream that updates userNames whenever a newUserNameEntered has a new value
+        userNames  = userNamesSubject.eraseToAnyPublisher()
+        
+        newUserNameEntered
+            .filter{$0.count >= 3}  /// protect how new data making sure it has the right requirements
+            .sink{ _ in
+            
+        } receiveValue: { [unowned self] username in
+//            userNames.value = userNames.value + [username] /// Option One
+            self.userNamesSubject.send(userNamesSubject.value + [username])
+        }
+        .store(in: &subscriptions)
+        
+        userNames.sink{ users in
+            print("usernames changed to \(users)")
+        }
+        .store(in: &subscriptions)
+        
+    }
+}
+
+let viewModel = ViewModel()
+ 
+// add new user name "Susan"
+viewModel.newUserNameEntered.send("Susan")
+
+// add new user name "Bob"
+viewModel.newUserNameEntered.send("Bob")
+
+// how do you protect userName from not setting it directly
+//viewModel.userNames.send("")
+
+
+```
