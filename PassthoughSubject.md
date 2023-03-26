@@ -9,4 +9,26 @@ PassthroughSubject
 Use for statring action/ process, equivalent to func 
 
 ```swift
+/// Does not hold a value
+/// It's a different use case for a data flow were you want to start a action
+
+let newUserNameEntered = PassthroughSubject<String, Never>()
+
+
+// get the value for newUserNameEntered
+// Does not hold a value
+
+// subscribe to Subject
+let subscription = newUserNameEntered.sink{
+    print($0)
+} receiveValue: { value in
+    print("reveived value \(value)")
+}
+
+// passing down new values with Subject
+newUserNameEntered.send("BOB")
+
+// sending completion finished with Subject
+newUserNameEntered.send(completion: .finished)
+
 ```
