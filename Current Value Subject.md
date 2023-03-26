@@ -4,6 +4,8 @@ Unlike `PassthroughSubject`, `CurrentValueSubject` maintains a buffer of the mos
 
 Calling `send(_:)`on a `CurrentValueSubject` also updates the current value, making it equivalent to updating the value directly.
 
+These are very useful for starting streams and sending new values 
+
 ```swift
 struct User {
     var id: Int
